@@ -5,7 +5,8 @@
 
 **1. Gambarkan rangkaian schematic yang digunakan pada percobaan\!**
 
-**Jawab:** 
+**Jawab:** <img width="903" height="600" alt="skematik_seven_segment" src="https://github.com/user-attachments/assets/561b4cc7-094b-4bd4-bf7f-d959a3b994f0" />
+
 
 
 -----
@@ -81,7 +82,8 @@ void loop() {
 
 **1. Gambarkan rangkaian schematic yang digunakan pada percobaan\!**
 
-**Jawab:**
+**Jawab:**<img width="1144" height="760" alt="skematik_push_button" src="https://github.com/user-attachments/assets/39ab02fa-4138-4b4e-9175-edea5faf3fad" />
+
 
 
 -----
