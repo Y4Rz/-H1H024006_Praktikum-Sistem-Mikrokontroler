@@ -5,26 +5,21 @@
 
 ### Soal 1: Apa fungsi perintah analogRead() pada rangkaian praktikum ini?
 
-`analogRead()` membaca tegangan analog pada pin A0 dari potensiometer
-dan mengkonversinya menjadi nilai digital 10-bit dengan rentang 0–1023.
-Nilai 0 mewakili tegangan 0V (GND) dan 1023 mewakili tegangan 5V.
-Fungsi ini adalah titik masuk data dari dunia analog ke sistem digital Arduino.
+`analogRead()` membaca tegangan analog yang masuk pada pin A0 dari potensiometer, kemudian mengubahnya menjadi data digital 10-bit dalam rentang 0–1023. Nilai 0 
+merepresentasikan tegangan sedangkan nilai 0V (GND), 1023 merepresentasikan tegangan 5V.
 
 ---
 
 ### Soal 2: Mengapa diperlukan fungsi map() dalam program tersebut?
 
-`analogRead()` menghasilkan rentang 0–1023 (10-bit ADC), sedangkan
-`analogWrite()` hanya menerima 0–255 (8-bit PWM) dan `myservo.write()`
-hanya menerima 0–180 (derajat). Kedua domain nilai ini tidak kompatibel
-secara langsung. `map()` melakukan scaling linear proporsional dari satu
-rentang ke rentang lain tanpa perlu perhitungan manual.
+Fungsi `analogRead()` menghasilkan nilai dalam rentang 0–1023 (ADC 10-bit), sementara fungsi `analogWrite()` hanya dapat menerima nilai 0–255 (PWM 8-bit), dan `myservo.write()` hanya menerima nilai 0–180 (derajat). Ketidaksesuaian rentang nilai antar domain tersebut tidak memungkinkan penggunaan langsung tanpa konversi. Fungsi `map()` hadir untuk menyelesaikan masalah ini dengan melakukan pemetaan linear secara proporsional dari satu rentang ke rentang lainnya tanpa membutuhkan perhitungan manual 
 
 ---
 
 ### Soal 3: Modifikasi program agar servo bergerak 30°–150°
-Link simulasi Modifikasi: https://www.tinkercad.com/things/c31qlPVEV9C-analog-to-digital-converter-adc
-<img width="1920" height="910" alt="image" src="https://github.com/user-attachments/assets/8445d470-201f-477d-941f-61240350801a" />
+Link simulasi Modifikasi: [https://www.tinkercad.com/things/c31qlPVEV9C-analog-to-digital-converter-adc](https://www.tinkercad.com/things/f5NLsSi87Vd-adc)
+<img width="1115" height="755" alt="image" src="https://github.com/user-attachments/assets/b4fd56a4-9df6-414b-98e3-1ae3583c5cfc" />
+
 
 
 ```cpp
@@ -65,27 +60,3 @@ void loop() {
 }
 ```
 
-#### Penjelasan Program
-
-##### Library
-`Servo.h` — library bawaan Arduino untuk mengontrol servo motor.
-
-##### Pin Setup
-- `potPin = A0` — pin pembacaan tegangan analog potensiometer
-- `servoPin = 9` — pin PWM output ke servo
-
-##### Variabel
-- `val` — menyimpan hasil analogRead (0–1023)
-- `pos` — menyimpan sudut hasil konversi (30–150)
-
-##### setup()
-- `myservo.attach(servoPin)` — menghubungkan objek servo ke pin 9
-- `Serial.begin(9600)` — membuka komunikasi serial 9600 baud
-
-##### loop()
-1. `analogRead(potPin)` membaca nilai ADC dari potensiometer
-2. `map(val, 0, 1023, 30, 150)` mengkonversi rentang ADC penuh
-   ke rentang sudut terbatas 30°–150°
-3. `myservo.write(pos)` menggerakkan servo ke sudut hasil konversi
-4. `Serial.print` menampilkan nilai ADC dan sudut ke Serial Monitor
-5. `delay(15)` memberi waktu servo untuk mencapai posisi target
