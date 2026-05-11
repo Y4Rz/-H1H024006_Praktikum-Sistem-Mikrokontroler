@@ -4,15 +4,11 @@
 
 ### 1. Apakah kedua task berjalan secara bersamaan atau bergantian? Jelaskan mekanismenya!
 
-Kedua task berjalan bergantian secara *concurrent* . Task `read_data` mengirim data ke queue menggunakan `xQueueSend()` lalu melakukan *delay* 100ms. Selama *delay*, task masuk ke kondisi *Blocked* dan scheduler mengaktifkan task `display`. Task `display` menunggu data dari queue menggunakan `xQueueReceive()` dengan parameter `portMAX_DELAY`, yang artinya ia berada dalam status *Blocked* (menunggu) sampai ada data yang masuk.
-
-Mekanisme queue ini memastikan sinkronisasi antar task  fungsi `display` hanya berjalan setelah `read_data` mengirimkan data ke antrean, sehingga tidak ada data yang terlewat atau terbaca ganda.
+Kedua task beroperasi secara bergantian namun memberikan kesan concurrent karena task `read_data` mengirimkan data ke queue melalui `xQueueSend()` lalu melakukan delay selama 100 ms sehingga masuk kondisi Blocked dan CPU digunakan oleh task `display`, sedangkan task `display` menunggu data dari queue menggunakan `xQueueReceive()` dengan `portMAX_DELAY`, sehingga sinkronisasi antar task terjamin dan data tidak terlewat maupun terbaca lebih dari sekali.
 
 ### 2. Apakah program ini berpotensi mengalami *race condition*? Jelaskan!
 
-**Tidak**, program ini tidak berpotensi mengalami *race condition*.
-
-*Race condition* umumnya terjadi ketika dua atau lebih task mengakses memori atau sumber daya bersamaan tanpa mekanisme sinkronisasi yang jelas. Pada program ini, pertukaran data antara task `read_data` dan `display` sepenuhnya diatur melalui antrean (Queue) bawaan FreeRTOS. Queue adalah struktur data *thread-safe* yang dikelola langsung oleh kernel RTOS dengan perlindungan *mutual exclusion* di dalamnya. Hal ini menjamin bahwa proses "tulis" dan "baca" data ke/dari memori queue tidak akan pernah bertabrakan secara bersamaan.
+Tidak, program ini tidak berpotensi mengalami race condition karena kondisi race condition umumnya muncul ketika dua atau lebih task mengakses memori atau sumber daya bersama secara simultan tanpa mekanisme sinkronisasi yang memadai, sedangkan pada program ini seluruh pertukaran data antara task `read_data` dan task `display` dilakukan sepenuhnya melalui queue bawaan FreeRTOS.
 
 ### 3. Modifikasilah program dengan menggunakan sensor DHT sesungguhnya sehingga informasi yang ditampilkan dinamis. Bagaimana hasilnya?
 
