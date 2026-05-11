@@ -4,23 +4,19 @@
 
 ### 1. Apakah ketiga task berjalan secara bersamaan atau bergantian? Jelaskan mekanismenya!
 
-Ketiga task berjalan secara **bergantian**. FreeRTOS menggunakan scheduler *preemptive* berbasis prioritas dengan sistem *time-slicing*. Karena ketiga task memiliki prioritas sama (priority 1), scheduler membagi waktu CPU secara bergantian di antara task yang dalam kondisi *Ready*. Ketika sebuah task memanggil `vTaskDelay()`, task tersebut masuk ke kondisi *Blocked* dan CPU diserahkan ke task lain. Efeknya terlihat seperti berjalan bersamaan (*concurrent*) meskipun sebenarnya hanya satu task yang menggunakan CPU pada satu waktu tertentu.
+Ketiga task berjalan secara bergantian karena FreeRTOS menggunakan scheduler preemptive berbasis prioritas dan time-slicing, sehingga task dengan prioritas sama akan memperoleh giliran CPU secara bergiliran, sementara `vTaskDelay()` membuat task masuk ke kondisi Blocked agar CPU dapat digunakan oleh task lain sehingga tampak berjalan bersamaan.
+
 
 ### 2. Bagaimana cara menambahkan task keempat? Jelaskan langkahnya!
 
-Langkah menambah task keempat:
+Untuk menambahkan task keempat pada FreeRTOS, deklarasikan terlebih dahulu prototipe fungsi task baru, tambahkan `xTaskCreate()` di dalam `setup()` sebelum `vTaskStartScheduler()`, lalu buat implementasi fungsi task menggunakan perulangan `while(1)` dan `vTaskDelay()` agar penggunaan CPU tetap teratur.
 
-* Deklarasikan prototipe fungsi task baru, misalnya `void TaskKeempat(void *pvParameters);`.
-
-
-* Tambahkan `xTaskCreate(TaskKeempat, "task4", 128, NULL, 1, NULL);` di dalam `setup()` sebelum `vTaskStartScheduler()`.
-
-
-* Definisikan fungsi task-nya di luar `loop()` dengan menyertakan *looping* `while(1)` dan `vTaskDelay()`.
 
 ### 3. Modifikasilah program dengan menambah sensor (potensiometer), lalu gunakan nilainya untuk mengontrol kecepatan LED! Bagaimana hasilnya?
 
-link modifikasi : https://wokwi.com/projects/463715247595730945
+link modifikasi : [https://wokwi.com/projects/463715247595730945](https://wokwi.com/projects/463734665312327681)
+<img width="797" height="595" alt="image" src="https://github.com/user-attachments/assets/75b050e8-0c1a-4d1e-82c6-181a6e9f894a" />
+
 ### B. Kode Program Modifikasi
 
 ```cpp
@@ -90,6 +86,3 @@ void Taskprint(void *pvParameters) {
 }
 
 ```
-
-### Penjelasan
-Setelah potensiometer ditambahkan, nilai analog di pin A0 akan terus dibaca oleh TaskPotensio. Nilai ini kemudian mengubah variabel blinkDelay secara global. Hasilnya, kecepatan kedipan LED pada TaskBlink1 dan TaskBlink2 akan berubah secara real-time mengikuti putaran potensiometer, membuktikan bahwa FreeRTOS dapat menangani pembacaan sensor dan aksi output dalam task yang berbeda secara efisien.
